@@ -355,7 +355,7 @@
       <div>
         <p class="eyebrow">往来款项明细</p>
         <h1>账目核对单</h1>
-        <p class="as-of">记录更新至 2026 年 8 月 10 日</p>
+        <p class="as-of" id="updated-at">记录加载中</p>
       </div>
       <button class="print-button" type="button" title="打印或保存为 PDF" aria-label="打印或保存为 PDF" onclick="window.print()">
         <i data-lucide="printer" aria-hidden="true"></i>
@@ -365,22 +365,22 @@
     <section class="balance-sheet" aria-label="金额汇总">
       <div class="metric transfer">
         <span class="metric-label"><span class="swatch"></span>转账合计</span>
-        <strong class="metric-value">¥120,200</strong>
+        <strong class="metric-value" id="loan-total">¥0</strong>
       </div>
       <div class="operator" aria-hidden="true">−</div>
       <div class="metric repaid">
         <span class="metric-label"><span class="swatch"></span>还款合计</span>
-        <strong class="metric-value">¥55,200</strong>
+        <strong class="metric-value" id="repayment-total">¥0</strong>
       </div>
       <div class="operator equals" aria-hidden="true">=</div>
       <div class="metric outstanding">
         <span class="metric-label"><span class="swatch"></span>剩余欠款</span>
-        <strong class="metric-value">¥65,000</strong>
+        <strong class="metric-value" id="balance-total">¥0</strong>
       </div>
     </section>
 
     <div class="status-band">
-      <span>按现有记录核算，尚有 <strong>人民币 65,000 元</strong> 未归还。</span>
+      <span>按现有记录核算，尚有 <strong id="balance-text">人民币 0 元</strong> 未归还。</span>
       <span class="status-pill">待结清</span>
     </div>
 
@@ -404,38 +404,103 @@
               <th scope="col">备注</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td>2026-07-20</td><td><span class="type payment">还款</span></td><td class="amount transfer"></td><td class="amount payment">¥1,000</td><td class="note">微信还款</td></tr>
-            <tr><td>2026-07-10</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥7,000</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>2026-02-10</td><td><span class="type payment">还款</span></td><td class="amount transfer"></td><td class="amount payment">¥10,000</td><td class="note"></td></tr>
-            <tr><td>2026-01-29</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥10,000</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>2025-10-21</td><td><span class="type payment">还款</span></td><td class="amount transfer"></td><td class="amount payment">¥5,000</td><td class="note"></td></tr>
-            <tr><td>2025-10-20</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥20,000</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>2025-10-20</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥8,000</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>2025-09-24</td><td><span class="type payment">还款</span></td><td class="amount transfer"></td><td class="amount payment">¥10,000</td><td class="note"></td></tr>
-            <tr><td>2025-09-20</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥20,000</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>2025-07-24</td><td><span class="type payment">还款</span></td><td class="amount transfer"></td><td class="amount payment">¥1,200</td><td class="note"></td></tr>
-            <tr><td>2025-06-28</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥1,200</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>2025-06-26</td><td><span class="type payment">还款</span></td><td class="amount transfer"></td><td class="amount payment">¥28,000</td><td class="note"></td></tr>
-            <tr><td>2025-06-23</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥28,000</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>2024-10-20</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥6,000</td><td class="amount payment"></td><td class="note"></td></tr>
-            <tr><td>日期不详</td><td><span class="type transfer">转账</span></td><td class="amount transfer">¥20,000</td><td class="amount payment"></td><td class="note">历史记录</td></tr>
+          <tbody id="ledger-rows">
+            <tr><td colspan="5">账目数据加载中</td></tr>
           </tbody>
           <tfoot>
-            <tr><td colspan="2">合计</td><td class="amount transfer">¥120,200</td><td class="amount payment">¥55,200</td><td></td></tr>
+            <tr><td colspan="2">合计</td><td class="amount transfer" id="loan-footer">¥0</td><td class="amount payment" id="repayment-footer">¥0</td><td></td></tr>
           </tfoot>
         </table>
       </div>
     </section>
 
     <footer class="footnote">
-      <p>核算公式：转账合计 ¥120,200 − 还款合计 ¥55,200 = 剩余欠款 ¥65,000。</p>
+      <p id="calculation-note">核算公式加载中。</p>
       <p>日期按现有记录整理，未计算利息及其他费用。</p>
     </footer>
   </main>
 
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script>
+    const formatMoney = (amount) => `¥${amount.toLocaleString("zh-CN")}`;
+
+    const formatUpdatedAt = (date) => {
+      const [year, month, day] = date.split("-").map(Number);
+      return `记录更新至 ${year} 年 ${month} 月 ${day} 日`;
+    };
+
+    const createCell = (text, className = "") => {
+      const cell = document.createElement("td");
+      cell.textContent = text;
+      if (className) cell.className = className;
+      return cell;
+    };
+
+    const createRecordRow = (record) => {
+      const isLoan = record.type === "loan";
+      const row = document.createElement("tr");
+      row.dataset.recordId = record.id;
+      row.append(createCell(record.date || "日期不详"));
+
+      const typeCell = document.createElement("td");
+      const typeBadge = document.createElement("span");
+      typeBadge.className = `type ${isLoan ? "transfer" : "payment"}`;
+      typeBadge.textContent = isLoan ? "转账" : "还款";
+      typeCell.append(typeBadge);
+      row.append(typeCell);
+
+      row.append(createCell(isLoan ? formatMoney(record.amount) : "", "amount transfer"));
+      row.append(createCell(isLoan ? "" : formatMoney(record.amount), "amount payment"));
+      row.append(createCell(record.note || "", "note"));
+      return row;
+    };
+
+    const validateLedger = (data) => {
+      if (!data || typeof data.updatedAt !== "string" || !Array.isArray(data.records)) {
+        throw new Error("账目数据格式不正确");
+      }
+      const ids = new Set();
+      for (const record of data.records) {
+        if (!record.id || ids.has(record.id)) throw new Error("账目记录 ID 重复或缺失");
+        if (!['loan', 'repayment'].includes(record.type)) throw new Error("账目记录类型不正确");
+        if (!Number.isSafeInteger(record.amount) || record.amount <= 0) throw new Error("账目金额不正确");
+        ids.add(record.id);
+      }
+    };
+
+    const renderLedger = (data) => {
+      validateLedger(data);
+      const records = [...data.records].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+      const loanTotal = records.filter((record) => record.type === "loan").reduce((sum, record) => sum + record.amount, 0);
+      const repaymentTotal = records.filter((record) => record.type === "repayment").reduce((sum, record) => sum + record.amount, 0);
+      const balance = loanTotal - repaymentTotal;
+
+      document.getElementById("updated-at").textContent = formatUpdatedAt(data.updatedAt);
+      document.getElementById("loan-total").textContent = formatMoney(loanTotal);
+      document.getElementById("repayment-total").textContent = formatMoney(repaymentTotal);
+      document.getElementById("balance-total").textContent = formatMoney(balance);
+      document.getElementById("balance-text").textContent = `人民币 ${balance.toLocaleString("zh-CN")} 元`;
+      document.getElementById("loan-footer").textContent = formatMoney(loanTotal);
+      document.getElementById("repayment-footer").textContent = formatMoney(repaymentTotal);
+      document.getElementById("calculation-note").textContent = `核算公式：转账合计 ${formatMoney(loanTotal)} − 还款合计 ${formatMoney(repaymentTotal)} = 剩余欠款 ${formatMoney(balance)}。`;
+      document.getElementById("ledger-rows").replaceChildren(...records.map(createRecordRow));
+    };
+
+    fetch(`ledger.json?v=${Date.now()}`, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error(`账目数据加载失败：${response.status}`);
+        return response.json();
+      })
+      .then(renderLedger)
+      .catch((error) => {
+        const cell = createCell("账目数据加载失败，请稍后刷新页面。", "note");
+        cell.colSpan = 5;
+        const row = document.createElement("tr");
+        row.append(cell);
+        document.getElementById("ledger-rows").replaceChildren(row);
+        console.error(error);
+      });
+
     if (window.lucide) window.lucide.createIcons();
   </script>
 </body>

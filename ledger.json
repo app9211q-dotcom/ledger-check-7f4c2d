@@ -1,0 +1,20 @@
+{
+  "updatedAt": "2026-08-10",
+  "records": [
+    { "id": "20260720-repayment-1000-01", "date": "2026-07-20", "type": "repayment", "amount": 1000, "note": "微信还款" },
+    { "id": "20260710-loan-7000-01", "date": "2026-07-10", "type": "loan", "amount": 7000, "note": "" },
+    { "id": "20260210-repayment-10000-01", "date": "2026-02-10", "type": "repayment", "amount": 10000, "note": "" },
+    { "id": "20260129-loan-10000-01", "date": "2026-01-29", "type": "loan", "amount": 10000, "note": "" },
+    { "id": "20251021-repayment-5000-01", "date": "2025-10-21", "type": "repayment", "amount": 5000, "note": "" },
+    { "id": "20251020-loan-20000-01", "date": "2025-10-20", "type": "loan", "amount": 20000, "note": "" },
+    { "id": "20251020-loan-8000-01", "date": "2025-10-20", "type": "loan", "amount": 8000, "note": "" },
+    { "id": "20250924-repayment-10000-01", "date": "2025-09-24", "type": "repayment", "amount": 10000, "note": "" },
+    { "id": "20250920-loan-20000-01", "date": "2025-09-20", "type": "loan", "amount": 20000, "note": "" },
+    { "id": "20250724-repayment-1200-01", "date": "2025-07-24", "type": "repayment", "amount": 1200, "note": "" },
+    { "id": "20250628-loan-1200-01", "date": "2025-06-28", "type": "loan", "amount": 1200, "note": "" },
+    { "id": "20250626-repayment-28000-01", "date": "2025-06-26", "type": "repayment", "amount": 28000, "note": "" },
+    { "id": "20250623-loan-28000-01", "date": "2025-06-23", "type": "loan", "amount": 28000, "note": "" },
+    { "id": "20241020-loan-6000-01", "date": "2024-10-20", "type": "loan", "amount": 6000, "note": "" },
+    { "id": "historical-loan-20000-01", "date": null, "type": "loan", "amount": 20000, "note": "历史记录" }
+  ]
+}
