@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-22",
+  "updatedAt": "2026-09-20",
   "records": [
     {
       "id": "20260720-repayment-1000-01",
@@ -112,6 +112,13 @@
       "type": "repayment",
       "amount": 1000,
       "note": "微信还款"
+    },
+    {
+      "id": "20260920-repayment-1000-01",
+      "date": "2026-09-20",
+      "type": "repayment",
+      "amount": 1000,
+      "note": ""
     }
   ]
 }
